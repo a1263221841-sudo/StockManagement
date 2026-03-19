@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWidget</class>
+ <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1032</width>
+    <height>612</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>库存管理系统 Version 1.0</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/new/prefix1/images/double.png</normaloff>:/new/prefix1/images/double.png</iconset>
+  </property>
+  <widget class="QTableWidget" name="tableWidget_ListData">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>1011</width>
+     <height>501</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_AddGoods">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>新增商品</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/update.png</normaloff>:/new/prefix1/images/update.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_DeleteGoods">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>删除商品</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/delete.png</normaloff>:/new/prefix1/images/delete.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_GoodsWareHousing">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>商品入库</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/input.png</normaloff>:/new/prefix1/images/input.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_GoodsDelivery">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>商品出库</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/output.png</normaloff>:/new/prefix1/images/output.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_LoadData">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>导出数据</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/open.png</normaloff>:/new/prefix1/images/open.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_DataSummary">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>60</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>数据汇总</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/logo.png</normaloff>:/new/prefix1/images/logo.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_DataSearch">
+   <property name="geometry">
+    <rect>
+     <x>920</x>
+     <y>10</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:rgb(66,200,198);color:white;border-radius: 3px;</string>
+   </property>
+   <property name="text">
+    <string>数据查询</string>
+   </property>
+   <property name="icon">
+    <iconset resource="images.qrc">
+     <normaloff>:/new/prefix1/images/select.png</normaloff>:/new/prefix1/images/select.png</iconset>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_GoodsNumber">
+   <property name="geometry">
+    <rect>
+     <x>762</x>
+     <y>10</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>10</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(255,0,255);
+</string>
+   </property>
+   <property name="text">
+    <string>商品编号：</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
+</ui>

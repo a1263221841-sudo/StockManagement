@@ -112,16 +112,16 @@ void MainWidget::on_pushButton_DeleteGoods_clicked()
 
   }
 
-//商品入库
+//商品出库
 #include "goodsdelivery.h"
-void MainWidget::on_pushButton_GoodsWareHousing_clicked()
+void MainWidget::on_pushButton_GoodsDelivery_clicked()
   {
     goodsdelivery *adddlg=new goodsdelivery();
     adddlg->show();
   }
-//商品出库
+//商品入库
 #include "goodswarehousing.h"
-void MainWidget::on_pushButton_GoodsDelivery_clicked()
+void MainWidget::on_pushButton_GoodsWareHousing_clicked()
    {
     goodswarehousing *adddlg =new goodswarehousing();
     adddlg->show();

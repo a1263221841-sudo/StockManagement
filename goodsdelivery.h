@@ -34,6 +34,8 @@ private:
 public:
     void InitComboBoxFunc(); // 初始化Combo box控件
 
+signals:
+    void dataChanged();// 数据变化信号
 };
 
 #endif // GOODSDELIVERY_H

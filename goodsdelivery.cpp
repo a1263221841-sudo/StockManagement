@@ -65,6 +65,7 @@ void goodsdelivery::on_pushButton_OutputGoods_clicked()
     if(sqlquery.exec(strdb))
     {
         QMessageBox::information(this,"提示","恭喜你,商品出库成功!");
+        emit dataChanged();//发射信号
 
     }else{
         QMessageBox::information(this,"提示","对不起,商品出库失败,请重新检查?");

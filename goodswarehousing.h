@@ -24,7 +24,7 @@ public:
     explicit goodswarehousing(QWidget *parent = nullptr);
     ~goodswarehousing();
 
-private:
+private slots:
     void on_pushButton_InputGoods_clicked();
     void on_pushButton_Exit_clicked();
 
@@ -33,6 +33,9 @@ private:
 
 public:
     void InitComboBoxFunc();
+
+signals:
+    void dataChanged();// 数据变化信号
 };
 
 #endif // GOODSWAREHOUSING_H

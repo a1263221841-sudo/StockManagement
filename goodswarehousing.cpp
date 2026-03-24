@@ -25,7 +25,7 @@ goodswarehousing::~goodswarehousing()
 void goodswarehousing::on_pushButton_InputGoods_clicked()
 {
     QString StrCBId=ui->comboBox_Id->currentText();
-
+    //qDebug()<<"StrCBId";
     //判断商品入库是否为空
     if(ui->lineEdit_Amount->text().isEmpty())
     {
@@ -61,6 +61,7 @@ void goodswarehousing::on_pushButton_InputGoods_clicked()
     if(sqlquery.exec(strdb))
     {
         QMessageBox::information(this,"提示","恭喜,入库成功");
+        emit dataChanged();//发射信号
     }else{
         QMessageBox::critical(this,"提示","对不起商品入库失败,请重新检查");
     }

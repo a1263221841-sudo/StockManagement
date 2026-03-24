@@ -60,6 +60,7 @@ void AddCommodity::on_pushButton_Add_clicked()
            if(sqlResult.exec(sqlquery))
            {
                QMessageBox::information(this,"Tips","恭喜你，商品记录插入成功？");
+               emit dataChanged();//发射信号
            }
            else
            {

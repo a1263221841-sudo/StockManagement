@@ -3,6 +3,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT +=sql
 
+QT += axcontainer
 CONFIG += c++11
 msvc: QMAKE_CXXFLAGS += /utf-8
 # The following define makes your compiler emit warnings if you use
@@ -18,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     addcommodity.cpp \
+    datasum.cpp \
     goodsdelivery.cpp \
     goodswarehousing.cpp \
     main.cpp \
@@ -25,12 +27,14 @@ SOURCES += \
 
 HEADERS += \
     addcommodity.h \
+    datasum.h \
     goodsdelivery.h \
     goodswarehousing.h \
     mainwidget.h
 
 FORMS += \
     addcommodity.ui \
+    datasum.ui \
     goodsdelivery.ui \
     goodswarehousing.ui \
     mainwidget.ui

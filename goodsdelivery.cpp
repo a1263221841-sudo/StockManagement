@@ -54,16 +54,29 @@ void goodsdelivery::on_pushButton_OutputGoods_clicked()
     //将输入数量+数量表当中的数量
     int inputamount=ui->lineEdit_Amount->text().toInt();//用户输入数量
     int tableamount=strAmount.toUInt();//将数据表里的数据转化为整型
-    int isum=tableamount-inputamount;//实现相加
+    int isum=tableamount-inputamount;//实现相减
 
     //int 转换成QString
     QString strresult=QString::number(isum);
 
     //更新数据表中数量字段的值
     QString strdb=QString ("update stockdatatable set stockamount=%1 where %2").arg(strresult).arg(strid);
-
+    QString strtime = QDateTime::currentDateTime().toString();
     if(sqlquery.exec(strdb))
     {
+        // ---------- 新增：插入流水记录 ----------
+            QSqlQuery logQuery;
+            logQuery.prepare("INSERT INTO stock_transaction (stock_id, transaction_type, quantity, remark) "
+                             "VALUES (:id, 'out', :qty, :remark)");
+            logQuery.bindValue(":id", StrCBId.toInt());   // stock_id 是 INT 类型，需转换
+            logQuery.bindValue(":qty", inputamount);
+            logQuery.bindValue(":remark", "商品出库");
+            if (!logQuery.exec()) {
+                qDebug() << "记录流水失败：" << logQuery.lastError().text();
+                // 可根据需要决定是否回滚，此处简单记录日志
+            }
+            // ------------------------------------
+
         QMessageBox::information(this,"提示","恭喜你,商品出库成功!");
         emit dataChanged();//发射信号
 

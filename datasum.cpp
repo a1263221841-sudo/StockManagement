@@ -107,117 +107,220 @@ void DataSum::on_pushButton_DataSum_clicked()
 
 void DataSum::on_pushButton_InputData_clicked()
 {
-    //获取选中行
-    int row = ui->tableWidget_ListData->currentRow();
-    if (row == -1)
-    {
-        QMessageBox::warning(this,"提示","请选中要入库的商品");
-        return;
-    }
+//    //获取选中行
+//    int row = ui->tableWidget_ListData->currentRow();
+//    if (row == -1)
+//    {
+//        QMessageBox::warning(this,"提示","请选中要入库的商品");
+//        return;
+//    }
 
-    //获取商品编号
-    QTableWidgetItem *idItem = ui->tableWidget_ListData->item(row,0);
-//   qDebug() << "当前选中行：" << ui->tableWidget_ListData->currentRow();
-
-
-//   // 调试：输出选中行的所有内容
-//       qDebug() << "=== 选中行" << row << "的数据 ===";
-//       for (int col = 0; col < ui->tableWidget_ListData->columnCount(); ++col) {
-//           QTableWidgetItem *item = ui->tableWidget_ListData->item(row, col);
-//           qDebug() << "列" << col << ":" << (item ? item->text() : "空");
-//       }
+//    //获取商品编号
+//    QTableWidgetItem *idItem = ui->tableWidget_ListData->item(row,0);
+////   qDebug() << "当前选中行：" << ui->tableWidget_ListData->currentRow();
 
 
-    if (!idItem) {
-            QMessageBox::critical(this, "错误", "无法获取商品编号！");
+////   // 调试：输出选中行的所有内容
+////       qDebug() << "=== 选中行" << row << "的数据 ===";
+////       for (int col = 0; col < ui->tableWidget_ListData->columnCount(); ++col) {
+////           QTableWidgetItem *item = ui->tableWidget_ListData->item(row, col);
+////           qDebug() << "列" << col << ":" << (item ? item->text() : "空");
+////       }
+
+
+//    if (!idItem) {
+//            QMessageBox::critical(this, "错误", "无法获取商品编号！");
+//            return;
+//        }
+//        QString stockId = idItem->text();
+////         qDebug() << "商品编号：" << stockId;
+//        QTableWidgetItem *amountItem = ui->tableWidget_ListData->item(row, 2);
+//            if (!amountItem) {
+//                QMessageBox::critical(this, "错误", "无法获取当前库存数量！");
+//                return;
+//            }
+//            bool ok;
+//            int currentAmount = amountItem->text().toInt(&ok);
+//            if (!ok) {
+//                QMessageBox::critical(this, "错误", "当前库存数量格式错误！");
+//                return;
+//            }
+//         // 输入入库数量
+//            int inputAmount = QInputDialog::getInt(this, "入库", "请输入入库数量：", 1, 1, 999999, 1, &ok);
+//                if (!ok) return;
+//         //计算新库存
+//          int newAmount = currentAmount + inputAmount;
+
+//          //更新数据库
+//          QSqlQuery query;
+//          query.prepare("update stockdatatable set StockAmount = :amount where StockId = :id");
+//          query.bindValue(":amount", newAmount);
+//          query.bindValue(":id",stockId);
+//          if (!query.exec()) {
+//                  QMessageBox::critical(this, "错误", "更新库存失败：" + query.lastError().text());
+//                  return;
+//              }
+
+//              QMessageBox::information(this, "成功", QString("商品 %1 入库 %2 件，新库存为 %3 件。")
+//                                       .arg(stockId).arg(inputAmount).arg(newAmount));
+
+//              // 6. 刷新表格显示（重新执行汇总查询）
+//              on_pushButton_DataSum_clicked();  // 或调用单独的刷新函数
+
+    // 清空表格
+        ui->tableWidget_ListData->clearContents();
+        ui->tableWidget_ListData->setRowCount(0);
+
+        // 设置表格列数及表头
+        ui->tableWidget_ListData->setColumnCount(5);
+        QStringList headers;
+        headers << "商品编号" << "商品名称" << "入库数量" << "入库时间" << "备注";
+        ui->tableWidget_ListData->setHorizontalHeaderLabels(headers);
+
+        // 设置列宽（可根据需要调整）
+        ui->tableWidget_ListData->setColumnWidth(0, 100);
+        ui->tableWidget_ListData->setColumnWidth(1, 150);
+        ui->tableWidget_ListData->setColumnWidth(2, 80);
+        ui->tableWidget_ListData->setColumnWidth(3, 300);
+        ui->tableWidget_ListData->setColumnWidth(4, 200);
+
+        // 查询入库流水（关联商品表获取商品名称）
+        QSqlQuery query;
+        QString sql = R"(
+            SELECT
+                t.stock_id,
+                s.StockName,
+                t.quantity,
+                t.transaction_time,
+                t.remark
+            FROM stock_transaction t
+            LEFT JOIN stockdatatable s ON t.stock_id = s.StockId
+            WHERE t.transaction_type = 'in'
+            ORDER BY t.transaction_time DESC
+        )";
+
+        if (!query.exec(sql)) {
+            QMessageBox::critical(this, "错误", "查询入库流水失败：" + query.lastError().text());
             return;
         }
-        QString stockId = idItem->text();
-//         qDebug() << "商品编号：" << stockId;
-        QTableWidgetItem *amountItem = ui->tableWidget_ListData->item(row, 2);
-            if (!amountItem) {
-                QMessageBox::critical(this, "错误", "无法获取当前库存数量！");
-                return;
-            }
-            bool ok;
-            int currentAmount = amountItem->text().toInt(&ok);
-            if (!ok) {
-                QMessageBox::critical(this, "错误", "当前库存数量格式错误！");
-                return;
-            }
-         // 输入入库数量
-            int inputAmount = QInputDialog::getInt(this, "入库", "请输入入库数量：", 1, 1, 999999, 1, &ok);
-                if (!ok) return;
-         //计算新库存
-          int newAmount = currentAmount + inputAmount;
 
-          //更新数据库
-          QSqlQuery query;
-          query.prepare("update stockdatatable set StockAmount = :amount where StockId = :id");
-          query.bindValue(":amount", newAmount);
-          query.bindValue(":id",stockId);
-          if (!query.exec()) {
-                  QMessageBox::critical(this, "错误", "更新库存失败：" + query.lastError().text());
-                  return;
-              }
+        int row = 0;
+        while (query.next()) {
+            ui->tableWidget_ListData->insertRow(row);
+            ui->tableWidget_ListData->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
+            ui->tableWidget_ListData->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
+            ui->tableWidget_ListData->setItem(row, 2, new QTableWidgetItem(query.value(2).toString()));
+            ui->tableWidget_ListData->setItem(row, 3, new QTableWidgetItem(query.value(3).toString()));
+            ui->tableWidget_ListData->setItem(row, 4, new QTableWidgetItem(query.value(4).toString()));
+            row++;
+        }
 
-              QMessageBox::information(this, "成功", QString("商品 %1 入库 %2 件，新库存为 %3 件。")
-                                       .arg(stockId).arg(inputAmount).arg(newAmount));
-
-              // 6. 刷新表格显示（重新执行汇总查询）
-              on_pushButton_DataSum_clicked();  // 或调用单独的刷新函数
-
+        if (row == 0) {
+            QMessageBox::information(this, "提示", "暂无入库记录");
+        }
 }
 
 void DataSum::on_pushButton_OutputData_clicked()
 {
-    //获取选中行
-    int row = ui->tableWidget_ListData->currentRow();
-    if (row == -1)
-    {
-        QMessageBox::warning(this,"提示","请选中要出库的商品");
-        return;
-    }
+//    //获取选中行
+//    int row = ui->tableWidget_ListData->currentRow();
+//    if (row == -1)
+//    {
+//        QMessageBox::warning(this,"提示","请选中要出库的商品");
+//        return;
+//    }
 
-    //获取商品编号
-    QTableWidgetItem *idItem = ui->tableWidget_ListData->item(row,0);
-    if (!idItem) {
-            QMessageBox::critical(this, "错误", "无法获取商品编号！");
-            return;
-        }
-        QString stockId = idItem->text();
-        QTableWidgetItem *amountItem = ui->tableWidget_ListData->item(row, 2);
-            if (!amountItem) {
-                QMessageBox::critical(this, "错误", "无法获取当前库存数量！");
-                return;
-            }
-            bool ok;
-            int currentAmount = amountItem->text().toInt(&ok);
-            if (!ok) {
-                QMessageBox::critical(this, "错误", "当前库存数量格式错误！");
-                return;
-            }
-         // 输入入库数量
-            int inputAmount = QInputDialog::getInt(this, "出库", "请输入入库数量：", 1, 1, 999999, 1, &ok);
-                if (!ok) return;
-         //计算新库存
-          int newAmount = currentAmount - inputAmount;
+//    //获取商品编号
+//    QTableWidgetItem *idItem = ui->tableWidget_ListData->item(row,0);
+//    if (!idItem) {
+//            QMessageBox::critical(this, "错误", "无法获取商品编号！");
+//            return;
+//        }
+//        QString stockId = idItem->text();
+//        QTableWidgetItem *amountItem = ui->tableWidget_ListData->item(row, 2);
+//            if (!amountItem) {
+//                QMessageBox::critical(this, "错误", "无法获取当前库存数量！");
+//                return;
+//            }
+//            bool ok;
+//            int currentAmount = amountItem->text().toInt(&ok);
+//            if (!ok) {
+//                QMessageBox::critical(this, "错误", "当前库存数量格式错误！");
+//                return;
+//            }
+//         // 输入入库数量
+//            int inputAmount = QInputDialog::getInt(this, "出库", "请输入入库数量：", 1, 1, 999999, 1, &ok);
+//                if (!ok) return;
+//         //计算新库存
+//          int newAmount = currentAmount - inputAmount;
 
-          //更新数据库
-          QSqlQuery query;
-          query.prepare("update stockdatatable set StockAmount = :amount where StockId = :id");
-          query.bindValue(":amount", newAmount);
-          query.bindValue(":id",stockId);
-          if (!query.exec()) {
-                  QMessageBox::critical(this, "错误", "更新库存失败：" + query.lastError().text());
-                  return;
-              }
+//          //更新数据库
+//          QSqlQuery query;
+//          query.prepare("update stockdatatable set StockAmount = :amount where StockId = :id");
+//          query.bindValue(":amount", newAmount);
+//          query.bindValue(":id",stockId);
+//          if (!query.exec()) {
+//                  QMessageBox::critical(this, "错误", "更新库存失败：" + query.lastError().text());
+//                  return;
+//              }
 
-              QMessageBox::information(this, "成功", QString("商品 %1 出库 %2 件，新库存为 %3 件。")
-                                       .arg(stockId).arg(inputAmount).arg(newAmount));
+//              QMessageBox::information(this, "成功", QString("商品 %1 出库 %2 件，新库存为 %3 件。")
+//                                       .arg(stockId).arg(inputAmount).arg(newAmount));
 
-              // 6. 刷新表格显示（重新执行汇总查询）
-              on_pushButton_DataSum_clicked();  // 或调用单独的刷新函数
+//              // 6. 刷新表格显示（重新执行汇总查询）
+//              on_pushButton_DataSum_clicked();  // 或调用单独的刷新函数
+
+    // 清空表格
+       ui->tableWidget_ListData->clearContents();
+       ui->tableWidget_ListData->setRowCount(0);
+
+       // 设置表格列数及表头
+       ui->tableWidget_ListData->setColumnCount(5);
+       QStringList headers;
+       headers << "商品编号" << "商品名称" << "出库数量" << "出库时间" << "备注";
+       ui->tableWidget_ListData->setHorizontalHeaderLabels(headers);
+
+       // 设置列宽（可根据需要调整）
+       ui->tableWidget_ListData->setColumnWidth(0, 100);
+       ui->tableWidget_ListData->setColumnWidth(1, 150);
+       ui->tableWidget_ListData->setColumnWidth(2, 80);
+       ui->tableWidget_ListData->setColumnWidth(3, 300);
+       ui->tableWidget_ListData->setColumnWidth(4, 200);
+
+       // 查询出库流水（关联商品表获取商品名称）
+       QSqlQuery query;
+       QString sql = R"(
+           SELECT
+               t.stock_id,
+               s.StockName,
+               t.quantity,
+               t.transaction_time,
+               t.remark
+           FROM stock_transaction t
+           LEFT JOIN stockdatatable s ON t.stock_id = s.StockId
+           WHERE t.transaction_type = 'out'
+           ORDER BY t.transaction_time DESC
+       )";
+
+       if (!query.exec(sql)) {
+           QMessageBox::critical(this, "错误", "查询出库流水失败：" + query.lastError().text());
+           return;
+       }
+
+       int row = 0;
+       while (query.next()) {
+           ui->tableWidget_ListData->insertRow(row);
+           ui->tableWidget_ListData->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
+           ui->tableWidget_ListData->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
+           ui->tableWidget_ListData->setItem(row, 2, new QTableWidgetItem(query.value(2).toString()));
+           ui->tableWidget_ListData->setItem(row, 3, new QTableWidgetItem(query.value(3).toString()));
+           ui->tableWidget_ListData->setItem(row, 4, new QTableWidgetItem(query.value(4).toString()));
+           row++;
+       }
+
+       if (row == 0) {
+           QMessageBox::information(this, "提示", "暂无出库记录");
+       }
 }
 
 void DataSum::on_pushButton_DataBackups_clicked()

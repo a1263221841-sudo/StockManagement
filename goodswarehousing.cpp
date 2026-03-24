@@ -60,6 +60,18 @@ void goodswarehousing::on_pushButton_InputGoods_clicked()
 
     if(sqlquery.exec(strdb))
     {
+        // ---------- 新增：插入流水记录 ----------
+            QSqlQuery logQuery;
+            logQuery.prepare("INSERT INTO stock_transaction (stock_id, transaction_type, quantity, remark) "
+                             "VALUES (:id, 'in', :qty, :remark)");
+            logQuery.bindValue(":id", StrCBId.toInt());   // stock_id 是 INT 类型，需转换
+            logQuery.bindValue(":qty", inputamount);
+            logQuery.bindValue(":remark", "商品入库");
+            if (!logQuery.exec()) {
+                qDebug() << "记录流水失败：" << logQuery.lastError().text();
+                // 可根据需要决定是否回滚，此处简单记录日志
+            }
+            // ------------------------------------
         QMessageBox::information(this,"提示","恭喜,入库成功");
         emit dataChanged();//发射信号
     }else{
